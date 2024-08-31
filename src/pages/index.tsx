@@ -1,6 +1,5 @@
 import CompactPullRequestItem from "@/components/PullRequestItem/Compact";
 import NormalPullRequestItem from "@/components/PullRequestItem/Normal";
-import SideNav from "@/components/SideNav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +38,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const fetchPullRequests = async ({
@@ -51,7 +50,7 @@ const fetchPullRequests = async ({
   owner: string;
   repositories: string[];
 }) => {
-  const res = await Promise.all(
+  const res = await Promise.allSettled(
     repositories.map((repository) =>
       axios.get(`https://api.github.com/repos/${owner}/${repository}/pulls`, {
         headers: {
@@ -62,7 +61,14 @@ const fetchPullRequests = async ({
     )
   );
 
-  const allPullRequests = _.flatten(res.map((r) => r.data));
+  const allPullRequests = _.flatten(
+    res
+      .filter(
+        (result): result is PromiseFulfilledResult<any> =>
+          result.status === "fulfilled"
+      )
+      .map((result) => result.value.data)
+  );
   return _.groupBy<PullRequest>(allPullRequests, "base.repo.name");
 };
 
@@ -71,7 +77,6 @@ const FORM_PAYLOAD_LOCAL_STORAGE_KEY = "form-submit-payload";
 export default function Home() {
   const { t } = useTranslation("common");
   const [repoName, setRepoName] = useState("");
-  const [isCollapsed, setIsCollapsed] = useState(true);
   const form = useForm({
     defaultValues: {
       githubToken: "",
