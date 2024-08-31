@@ -406,29 +406,21 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div
-            className="flex flex-row gap-x-2"
-            style={{
-              flexDirection: isMobile ? "column" : "row",
-            }}
-          >
+          <div className="flex flex-row gap-x-2">
             <ToggleGroup
               type="single"
               value={groupMode}
               defaultValue={GroupMode.GROUP_BY_REPO}
               onValueChange={(value) => setGroupMode(value as GroupMode)}
               className="mb-4"
-              style={{
-                flexDirection: isMobile ? "column" : "row",
-              }}
             >
               <ToggleGroupItem value={GroupMode.GROUP_BY_REPO}>
                 <GroupIcon className="w-4 h-4 mr-2" />
-                {t("group_mode.group_by_repo")}
+                {!isMobile && t("group_mode.group_by_repo")}
               </ToggleGroupItem>
               <ToggleGroupItem value={GroupMode.GROUP_BY_AUTHOR}>
                 <UserIcon className="w-4 h-4 mr-2" />
-                {t("group_mode.group_by_author")}
+                {!isMobile && t("group_mode.group_by_author")}
               </ToggleGroupItem>
             </ToggleGroup>
 
@@ -440,17 +432,14 @@ export default function Home() {
               defaultValue={ViewMode.COMPACT}
               onValueChange={(value) => setViewMode(value as ViewMode)}
               className="mb-4"
-              style={{
-                flexDirection: isMobile ? "column" : "row",
-              }}
             >
               <ToggleGroupItem value={ViewMode.COMPACT}>
                 <ALargeSmall className="w-4 h-4 mr-2" />
-                {t("view_mode.compact")}
+                {!isMobile && t("view_mode.compact")}
               </ToggleGroupItem>
               <ToggleGroupItem value={ViewMode.NORMAL}>
                 <AArrowDown className="w-4 h-4 mr-2" />
-                {t("view_mode.detailed")}
+                {!isMobile && t("view_mode.detailed")}
               </ToggleGroupItem>
             </ToggleGroup>
 
@@ -462,17 +451,14 @@ export default function Home() {
               defaultValue={SortMode.CREATED_AT_ASC}
               onValueChange={(value) => setSortMode(value as SortMode)}
               className="mb-4"
-              style={{
-                flexDirection: isMobile ? "column" : "row",
-              }}
             >
               <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
                 <CalendarArrowUp className="w-4 h-4 mr-2" />
-                {t("sort_mode.created_at_asc")}
+                {!isMobile && t("sort_mode.created_at_asc")}
               </ToggleGroupItem>
               <ToggleGroupItem value={SortMode.CREATED_AT_DESC}>
                 <CalendarArrowDown className="w-4 h-4 mr-2" />
-                {t("sort_mode.created_at_desc")}
+                {!isMobile && t("sort_mode.created_at_desc")}
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
