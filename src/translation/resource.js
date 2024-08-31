@@ -1,6 +1,9 @@
 const resource = {
   en: {
     translation: {
+      "title.home": "Home",
+      "title.settings": "Settings",
+      "description": "PR Platform | A platform to aggregate all Pull Request",
       "navigation.home": "Home",
       "navigation.settings": "Settings",
       "errors.general": "General Error",
@@ -37,6 +40,9 @@ const resource = {
   },
   "zh-TW": {
     translation: {
+      "title.home": "首頁",
+      "title.settings": "設定",
+      "description": "PR Platform | 聚集所有 Pull Request 的平台",
       "navigation.home": "首頁",
       "navigation.settings": "設定",
       "errors.general": "一般錯誤",
@@ -73,6 +79,9 @@ const resource = {
   },
   ja: {
     translation: {
+      "title.home": "ホーム",
+      "title.settings": "設定",
+      "description": "PR Platform | プルリクエストを集約するプラットフォーム",
       "navigation.home": "ホーム",
       "navigation.settings": "設定",
       "errors.general": "一般エラー",
@@ -109,6 +118,9 @@ const resource = {
   },
   ko: {
     translation: {
+      "title.home": "홈",
+      "title.settings": "설정",
+      "description": "PR Platform | 풀 리퀘스트를 집계하는 플랫폼",
       "navigation.home": "홈",
       "navigation.settings": "설정",
       "errors.general": "일반 오류",
@@ -145,6 +157,9 @@ const resource = {
   },
   th: {
     translation: {
+      "title.home": "หน้าหลัก",
+      "title.settings": "ตั้งค่า",
+      "description": "PR Platform | พอร์ทัลที่รวมคำขอดึงทั้งหมด",
       "navigation.home": "หน้าหลัก",
       "navigation.settings": "ตั้งค่า",
       "errors.general": "ข้อผิดพลาดทั่วไป",
@@ -181,6 +196,9 @@ const resource = {
   },
   vi: {
     translation: {
+      "title.home": "Trang chủ",
+      "title.settings": "Cài đặt",
+      "description": "PR Platform | Nền tảng tổng hợp tất cả các yêu cầu kéo",
       "navigation.home": "Trang chủ",
       "errors.general": "Lỗi chung",
       "pull_request.query_title": "Yêu cầu kéo",

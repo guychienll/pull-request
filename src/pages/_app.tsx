@@ -1,10 +1,10 @@
+import Layout from "@/components/Layout";
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "next-themes";
 import { appWithTranslation } from "next-i18next";
+import { ThemeProvider } from "next-themes";
+import type { AppProps } from "next/app";
 import config from "../../next-i18next.config.js";
-import Layout from "./_layout";
 
 const queryClient = new QueryClient();
 
