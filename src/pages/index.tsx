@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { LOCAL_STORAGE_KEY } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 import { PullRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -45,12 +46,14 @@ import {
   CalendarArrowDown,
   CalendarArrowUp,
   ChevronDownIcon,
+  CopyIcon,
   GroupIcon,
   InboxIcon,
   UserIcon,
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
@@ -105,9 +108,16 @@ const fetchPullRequests = async ({
 const FORM_PAYLOAD_LOCAL_STORAGE_KEY = "form-submit-payload";
 
 export default function Home() {
+  const router = useRouter();
+  const { githubToken, owner, repositories } = router.query;
   const { t } = useTranslation("common");
   const [repoName, setRepoName] = useState("");
-  const form = useForm({
+  const { toast } = useToast();
+  const form = useForm<{
+    githubToken: string;
+    owner: string;
+    repositories: string[];
+  }>({
     defaultValues: {
       githubToken: "",
       owner: "",
@@ -119,22 +129,31 @@ export default function Home() {
     GroupMode.GROUP_BY_REPO
   );
   const [sortMode, setSortMode] = useState<SortMode>(SortMode.CREATED_AT_ASC);
-  const { getValues, handleSubmit, setValue } = form;
+  const { getValues, handleSubmit, setValue, reset } = form;
 
   useEffect(() => {
     if (
-      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "false") !== true
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "false") === true
     ) {
-      return;
+      const savedForm = localStorage.getItem(FORM_PAYLOAD_LOCAL_STORAGE_KEY);
+
+      if (savedForm) {
+        reset(JSON.parse(savedForm));
+      }
     }
-    const savedForm = localStorage.getItem(FORM_PAYLOAD_LOCAL_STORAGE_KEY);
-    if (savedForm) {
-      const parsedForm = JSON.parse(savedForm);
-      setValue("githubToken", parsedForm.githubToken);
-      setValue("owner", parsedForm.owner);
-      setValue("repositories", parsedForm.repositories);
+
+    if (Object.keys(router.query).length > 0) {
+      const repositoriesArray = Array.isArray(repositories)
+        ? repositories
+        : ((repositories as string) || "").split(",");
+      const validRepositories = repositoriesArray.filter((repo) => repo !== "");
+      reset({
+        githubToken: (githubToken as string) || "",
+        owner: (owner as string) || "",
+        repositories: validRepositories,
+      });
     }
-  }, [setValue]);
+  }, [setValue, router.query]);
 
   const {
     data: allPullRequestList,
@@ -165,6 +184,12 @@ export default function Home() {
   }, [allPullRequestList, groupMode, sortMode]);
 
   const onSubmit = handleSubmit((data) => {
+    const queryParams = new URLSearchParams({
+      githubToken: data.githubToken,
+      owner: data.owner,
+      repositories: data.repositories.join(","),
+    });
+    router.replace(`/?${queryParams.toString()}`);
     if (
       JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "false") === true
     ) {
@@ -254,11 +279,30 @@ export default function Home() {
       <main className="flex-1">
         <div className="flex flex-col items-center my-4 gap-y-4 max-w-[1024px] mx-auto px-4">
           <Card className="w-full">
-            <CardHeader>
-              <CardTitle>{t("pull_request.query_title")}</CardTitle>
-              <CardDescription>
-                {t("pull_request.query_description")}
-              </CardDescription>
+            <CardHeader className="flex flex-row justify-between">
+              <div>
+                <CardTitle>{t("pull_request.query_title")}</CardTitle>
+                <CardDescription>
+                  {t("pull_request.query_description")}
+                </CardDescription>
+              </div>
+              {getValues().githubToken &&
+                getValues().owner &&
+                getValues().repositories.length > 0 && (
+                  <Button
+                    onClick={() => {
+                      const url = window.location.href;
+                      navigator.clipboard.writeText(url);
+                      toast({
+                        title: t("form.copied_url"),
+                        description: t("form.copied_url_description"),
+                      });
+                    }}
+                  >
+                    <CopyIcon className="w-4 h-4 mr-2" />
+                    {t("actions.copy_url")}
+                  </Button>
+                )}
             </CardHeader>
             <CardContent className="space-y-4">
               <Form {...form}>
