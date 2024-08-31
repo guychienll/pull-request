@@ -31,10 +31,7 @@ import { PullRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as _ from "lodash";
-import {
-  AArrowDown,
-  ALargeSmall
-} from "lucide-react";
+import { AArrowDown, ALargeSmall } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState } from "react";
@@ -96,6 +93,60 @@ export default function Home() {
   if (error) {
     return <div>{t("errors.general", { message: error.message })}</div>;
   }
+
+  const renderElem = () => {
+    if (isLoading && !pullRequests) {
+      return (
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+        </div>
+      );
+    } else if (!pullRequests) {
+      return <div>{t("common.no_data")}</div>;
+    } else {
+      return (
+        <div className="space-y-2 w-full">
+          <ToggleGroup
+            type="single"
+            value={viewMode}
+            onValueChange={(value) =>
+              setViewMode(value as "compact" | "normal")
+            }
+            className="mb-4"
+          >
+            <ToggleGroupItem value="compact">
+              <ALargeSmall className="w-4 h-4 mr-2" />
+              {t("view_mode.compact")}
+            </ToggleGroupItem>
+            <ToggleGroupItem value="normal">
+              <AArrowDown className="w-4 h-4 mr-2" />
+              {t("view_mode.detailed")}
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <Accordion type="single" collapsible className="w-full">
+            {Object.entries(pullRequests || {}).map(([repo, prs]) => (
+              <AccordionItem key={repo} value={repo}>
+                <AccordionTrigger>{repo}</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="space-y-2">
+                    {prs.map((pr) => {
+                      return viewMode === "compact" ? (
+                        <CompactPullRequestItem key={pr.id} pr={pr} />
+                      ) : (
+                        <NormalPullRequestItem key={pr.id} pr={pr} />
+                      );
+                    })}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="flex">
@@ -209,49 +260,8 @@ export default function Home() {
               </Form>
             </CardContent>
           </Card>
-          <ToggleGroup
-            type="single"
-            value={viewMode}
-            onValueChange={(value) =>
-              setViewMode(value as "compact" | "normal")
-            }
-            className="mb-4"
-          >
-            <ToggleGroupItem value="compact">
-              <ALargeSmall className="w-4 h-4 mr-2" />
-              {t("view_mode.compact")}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="normal">
-              <AArrowDown className="w-4 h-4 mr-2" />
-              {t("view_mode.detailed")}
-            </ToggleGroupItem>
-          </ToggleGroup>
-          {isLoading ? (
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-            </div>
-          ) : (
-            <Accordion type="single" collapsible className="w-full">
-              {Object.entries(pullRequests || {}).map(([repo, prs]) => (
-                <AccordionItem key={repo} value={repo}>
-                  <AccordionTrigger>{repo}</AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="space-y-2">
-                      {prs.map((pr) => {
-                        return viewMode === "compact" ? (
-                          <CompactPullRequestItem key={pr.id} pr={pr} />
-                        ) : (
-                          <NormalPullRequestItem key={pr.id} pr={pr} />
-                        );
-                      })}
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          )}
+
+          {renderElem()}
         </div>
       </main>
     </div>

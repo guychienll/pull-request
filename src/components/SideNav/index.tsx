@@ -56,6 +56,7 @@ function SideNav({
               className={`w-full justify-start transition-all duration-300 ease-in-out ${
                 isCollapsed ? "px-2" : "px-4"
               }`}
+              onClick={() => router.push("/")}
             >
               <HomeIcon className="h-5 w-5 flex-shrink-0" />
               <span
@@ -64,23 +65,6 @@ function SideNav({
                 }`}
               >
                 {t("navigation.home")}
-              </span>
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className={`w-full justify-start transition-all duration-300 ease-in-out ${
-                isCollapsed ? "px-2" : "px-4"
-              }`}
-            >
-              <SettingsIcon className="h-5 w-5 flex-shrink-0" />
-              <span
-                className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
-                  isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-                }`}
-              >
-                {t("navigation.settings")}
               </span>
             </Button>
           </li>
