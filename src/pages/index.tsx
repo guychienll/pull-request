@@ -25,6 +25,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { LOCAL_STORAGE_KEY } from "@/constants";
 import { PullRequest } from "@/types";
@@ -206,27 +214,36 @@ export default function Home() {
     } else {
       return (
         <div className="space-y-2 w-full">
-          <Collapsible defaultOpen={true} className="w-full">
-            {Object.entries(pullRequestList || {}).map(([repo, prs]) => (
-              <CollapsibleTrigger key={repo} className="w-full">
-                <div className="flex justify-between items-center p-2 border-b">
-                  <span>{repo}</span>
-                  <ChevronDownIcon className="h-4 w-4" />
-                </div>
-                <CollapsibleContent>
-                  <ul className="space-y-2 p-2">
-                    {prs.map((pr) =>
-                      viewMode === ViewMode.COMPACT ? (
-                        <CompactPullRequestItem key={pr.id} pr={pr} />
-                      ) : (
-                        <NormalPullRequestItem key={pr.id} pr={pr} />
-                      )
-                    )}
-                  </ul>
-                </CollapsibleContent>
-              </CollapsibleTrigger>
-            ))}
-          </Collapsible>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {groupMode === GroupMode.GROUP_BY_REPO
+                    ? t("common.repository")
+                    : t("common.author")}
+                </TableHead>
+                <TableHead>{t("common.content")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Object.entries(pullRequestList || {}).map(([repo, prs]) => (
+                <TableRow key={repo}>
+                  <TableCell>{repo}</TableCell>
+                  <TableCell>
+                    <ul className="space-y-2">
+                      {prs.map((pr) =>
+                        viewMode === ViewMode.COMPACT ? (
+                          <CompactPullRequestItem key={pr.id} pr={pr} />
+                        ) : (
+                          <NormalPullRequestItem key={pr.id} pr={pr} />
+                        )
+                      )}
+                    </ul>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       );
     }
