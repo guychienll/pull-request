@@ -1,7 +1,6 @@
 import SideNav from "@/components/SideNav";
 import { Toaster } from "@/components/ui/toaster";
 import { useTranslation } from "next-i18next";
-import { Head } from "next/document";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
