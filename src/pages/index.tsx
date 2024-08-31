@@ -10,11 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   Form,
   FormControl,
   FormField,
@@ -23,8 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -33,46 +26,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { LOCAL_STORAGE_KEY } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
-import { PullRequest } from "@/types";
+import { GroupMode, PullRequest, SortMode, ViewMode } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as _ from "lodash";
-import {
-  AArrowDown,
-  ALargeSmall,
-  CalendarArrowDown,
-  CalendarArrowUp,
-  ChevronDownIcon,
-  CopyIcon,
-  GroupIcon,
-  InboxIcon,
-  UserIcon,
-} from "lucide-react";
+import { CopyIcon, InboxIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import { isMobile } from "react-device-detect";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
+import dynamic from "next/dynamic";
 
-enum GroupMode {
-  GROUP_BY_REPO = "group_by_repo",
-  GROUP_BY_AUTHOR = "group_by_author",
-}
-
-enum ViewMode {
-  COMPACT = "compact",
-  NORMAL = "normal",
-}
-
-enum SortMode {
-  CREATED_AT_ASC = "created_at_asc",
-  CREATED_AT_DESC = "created_at_desc",
-}
+const FilterPanel = dynamic(() => import("@/components/FilterPanel"), {
+  ssr: false,
+});
 
 const fetchPullRequests = async ({
   githubToken,
@@ -406,62 +377,14 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div className="flex flex-row gap-x-2">
-            <ToggleGroup
-              type="single"
-              value={groupMode}
-              defaultValue={GroupMode.GROUP_BY_REPO}
-              onValueChange={(value) => setGroupMode(value as GroupMode)}
-              className="mb-4"
-            >
-              <ToggleGroupItem value={GroupMode.GROUP_BY_REPO}>
-                <GroupIcon className="w-4 h-4 mr-2" />
-                {!isMobile && t("group_mode.group_by_repo")}
-              </ToggleGroupItem>
-              <ToggleGroupItem value={GroupMode.GROUP_BY_AUTHOR}>
-                <UserIcon className="w-4 h-4 mr-2" />
-                {!isMobile && t("group_mode.group_by_author")}
-              </ToggleGroupItem>
-            </ToggleGroup>
-
-            <Separator orientation="vertical" />
-
-            <ToggleGroup
-              type="single"
-              value={viewMode}
-              defaultValue={ViewMode.COMPACT}
-              onValueChange={(value) => setViewMode(value as ViewMode)}
-              className="mb-4"
-            >
-              <ToggleGroupItem value={ViewMode.COMPACT}>
-                <ALargeSmall className="w-4 h-4 mr-2" />
-                {!isMobile && t("view_mode.compact")}
-              </ToggleGroupItem>
-              <ToggleGroupItem value={ViewMode.NORMAL}>
-                <AArrowDown className="w-4 h-4 mr-2" />
-                {!isMobile && t("view_mode.detailed")}
-              </ToggleGroupItem>
-            </ToggleGroup>
-
-            <Separator orientation="vertical" />
-
-            <ToggleGroup
-              type="single"
-              value={sortMode}
-              defaultValue={SortMode.CREATED_AT_ASC}
-              onValueChange={(value) => setSortMode(value as SortMode)}
-              className="mb-4"
-            >
-              <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
-                <CalendarArrowUp className="w-4 h-4 mr-2" />
-                {!isMobile && t("sort_mode.created_at_asc")}
-              </ToggleGroupItem>
-              <ToggleGroupItem value={SortMode.CREATED_AT_DESC}>
-                <CalendarArrowDown className="w-4 h-4 mr-2" />
-                {!isMobile && t("sort_mode.created_at_desc")}
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
+          <FilterPanel
+            groupMode={groupMode}
+            setGroupMode={setGroupMode}
+            setSortMode={setSortMode}
+            setViewMode={setViewMode}
+            sortMode={sortMode}
+            viewMode={viewMode}
+          />
 
           {renderElem()}
         </div>

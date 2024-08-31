@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }`;
 
   return (
-    <div className="flex">
+    <div className="flex max-w-screen overflow-hidden">
       <title>{title}</title>
       <meta name="description" content={t("description")} />
       <meta property="og:title" content={title} />
@@ -33,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
       <SideNav
-        isCollapsed={isMobile ? true :isCollapsed}
+        isCollapsed={isMobile ? true : isCollapsed}
         setIsCollapsed={isMobile ? () => 0 : setIsCollapsed}
       />
       <main className="flex-1">{children}</main>

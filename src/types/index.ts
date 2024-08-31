@@ -56,4 +56,20 @@ type PullRequest = {
   [key: string]: any;
 };
 
+enum GroupMode {
+  GROUP_BY_REPO = "group_by_repo",
+  GROUP_BY_AUTHOR = "group_by_author",
+}
+
+enum ViewMode {
+  COMPACT = "compact",
+  NORMAL = "normal",
+}
+
+enum SortMode {
+  CREATED_AT_ASC = "created_at_asc",
+  CREATED_AT_DESC = "created_at_desc",
+}
+
 export type { PullRequest };
+export { GroupMode, ViewMode, SortMode };
