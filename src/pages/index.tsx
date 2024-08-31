@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { LOCAL_STORAGE_KEY } from "@/constants";
@@ -33,13 +34,32 @@ import * as _ from "lodash";
 import {
   AArrowDown,
   ALargeSmall,
+  CalendarArrowDown,
+  CalendarArrowUp,
   ChevronDownIcon,
+  GroupIcon,
   InboxIcon,
+  UserIcon,
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+
+enum GroupMode {
+  GROUP_BY_REPO = "group_by_repo",
+  GROUP_BY_AUTHOR = "group_by_author",
+}
+
+enum ViewMode {
+  COMPACT = "compact",
+  NORMAL = "normal",
+}
+
+enum SortMode {
+  CREATED_AT_ASC = "created_at_asc",
+  CREATED_AT_DESC = "created_at_desc",
+}
 
 const fetchPullRequests = async ({
   githubToken,
@@ -69,7 +89,8 @@ const fetchPullRequests = async ({
       )
       .map((result) => result.value.data)
   );
-  return _.groupBy<PullRequest>(allPullRequests, "base.repo.name");
+
+  return allPullRequests;
 };
 
 const FORM_PAYLOAD_LOCAL_STORAGE_KEY = "form-submit-payload";
@@ -84,6 +105,11 @@ export default function Home() {
       repositories: [],
     },
   });
+  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.COMPACT);
+  const [groupMode, setGroupMode] = useState<GroupMode>(
+    GroupMode.GROUP_BY_REPO
+  );
+  const [sortMode, setSortMode] = useState<SortMode>(SortMode.CREATED_AT_ASC);
   const { getValues, handleSubmit, setValue } = form;
 
   useEffect(() => {
@@ -102,16 +128,32 @@ export default function Home() {
   }, [setValue]);
 
   const {
-    data: pullRequests,
+    data: allPullRequestList,
     isLoading,
     error,
     refetch,
-  } = useQuery<_.Dictionary<PullRequest[]>>({
+  } = useQuery<PullRequest[]>({
     queryKey: [getValues()],
-    queryFn: () => fetchPullRequests(getValues()),
+    queryFn: () =>
+      fetchPullRequests({
+        githubToken: getValues().githubToken,
+        owner: getValues().owner,
+        repositories: getValues().repositories,
+      }),
     enabled: false,
   });
-  const [viewMode, setViewMode] = useState<"compact" | "normal">("compact");
+
+  const pullRequestList = useMemo(() => {
+    const sortedPullRequestList = _.orderBy(
+      allPullRequestList,
+      "created_at",
+      sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc"
+    );
+
+    return groupMode === GroupMode.GROUP_BY_REPO
+      ? _.groupBy<PullRequest>(sortedPullRequestList, "base.repo.name")
+      : _.groupBy<PullRequest>(sortedPullRequestList, "user.login");
+  }, [allPullRequestList, groupMode, sortMode]);
 
   const onSubmit = handleSubmit((data) => {
     if (
@@ -130,7 +172,7 @@ export default function Home() {
   }
 
   const renderElem = () => {
-    if (isLoading && !pullRequests) {
+    if (isLoading && !allPullRequestList) {
       return (
         <div className="space-y-2">
           <Skeleton className="h-4 w-full" />
@@ -138,7 +180,10 @@ export default function Home() {
           <Skeleton className="h-4 w-full" />
         </div>
       );
-    } else if (!pullRequests || Object.keys(pullRequests).length === 0) {
+    } else if (
+      !allPullRequestList ||
+      Object.keys(allPullRequestList).length === 0
+    ) {
       return (
         <Card className="w-full">
           <CardContent>
@@ -154,25 +199,8 @@ export default function Home() {
     } else {
       return (
         <div className="space-y-2 w-full">
-          <ToggleGroup
-            type="single"
-            value={viewMode}
-            onValueChange={(value) =>
-              setViewMode(value as "compact" | "normal")
-            }
-            className="mb-4"
-          >
-            <ToggleGroupItem value="compact">
-              <ALargeSmall className="w-4 h-4 mr-2" />
-              {t("view_mode.compact")}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="normal">
-              <AArrowDown className="w-4 h-4 mr-2" />
-              {t("view_mode.detailed")}
-            </ToggleGroupItem>
-          </ToggleGroup>
-          <Collapsible className="w-full">
-            {Object.entries(pullRequests || {}).map(([repo, prs]) => (
+          <Collapsible defaultOpen={true} className="w-full">
+            {Object.entries(pullRequestList || {}).map(([repo, prs]) => (
               <CollapsibleTrigger key={repo} className="w-full">
                 <div className="flex justify-between items-center p-2 border-b">
                   <span>{repo}</span>
@@ -180,13 +208,13 @@ export default function Home() {
                 </div>
                 <CollapsibleContent>
                   <ul className="space-y-2 p-2">
-                    {prs.map((pr) => {
-                      return viewMode === "compact" ? (
+                    {prs.map((pr) =>
+                      viewMode === ViewMode.COMPACT ? (
                         <CompactPullRequestItem key={pr.id} pr={pr} />
                       ) : (
                         <NormalPullRequestItem key={pr.id} pr={pr} />
-                      );
-                    })}
+                      )
+                    )}
                   </ul>
                 </CollapsibleContent>
               </CollapsibleTrigger>
@@ -308,6 +336,63 @@ export default function Home() {
               </Form>
             </CardContent>
           </Card>
+
+          <div className="flex flex-row gap-x-2">
+            <ToggleGroup
+              type="single"
+              value={groupMode}
+              defaultValue={GroupMode.GROUP_BY_REPO}
+              onValueChange={(value) => setGroupMode(value as GroupMode)}
+              className="mb-4"
+            >
+              <ToggleGroupItem value={GroupMode.GROUP_BY_REPO}>
+                <GroupIcon className="w-4 h-4 mr-2" />
+                {t("group_mode.group_by_repo")}
+              </ToggleGroupItem>
+              <ToggleGroupItem value={GroupMode.GROUP_BY_AUTHOR}>
+                <UserIcon className="w-4 h-4 mr-2" />
+                {t("group_mode.group_by_author")}
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            <Separator orientation="vertical" />
+
+            <ToggleGroup
+              type="single"
+              value={viewMode}
+              defaultValue={ViewMode.COMPACT}
+              onValueChange={(value) => setViewMode(value as ViewMode)}
+              className="mb-4"
+            >
+              <ToggleGroupItem value={ViewMode.COMPACT}>
+                <ALargeSmall className="w-4 h-4 mr-2" />
+                {t("view_mode.compact")}
+              </ToggleGroupItem>
+              <ToggleGroupItem value={ViewMode.NORMAL}>
+                <AArrowDown className="w-4 h-4 mr-2" />
+                {t("view_mode.detailed")}
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            <Separator orientation="vertical" />
+
+            <ToggleGroup
+              type="single"
+              value={sortMode}
+              defaultValue={SortMode.CREATED_AT_ASC}
+              onValueChange={(value) => setSortMode(value as SortMode)}
+              className="mb-4"
+            >
+              <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
+                <CalendarArrowUp className="w-4 h-4 mr-2" />
+                {t("sort_mode.created_at_asc")}
+              </ToggleGroupItem>
+              <ToggleGroupItem value={SortMode.CREATED_AT_DESC}>
+                <CalendarArrowDown className="w-4 h-4 mr-2" />
+                {t("sort_mode.created_at_desc")}
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
 
           {renderElem()}
         </div>

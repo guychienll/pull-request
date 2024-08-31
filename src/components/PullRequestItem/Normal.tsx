@@ -52,7 +52,7 @@ const NormalPullRequestItem: React.FC<{ pr: PullRequest }> = ({ pr }) => {
                   <TooltipContent>{pr.user.login}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              <div>
+              <div className="flex flex-col text-left">
                 <div className="font-medium">{pr.user.login}</div>
                 <div className="text-sm text-muted-foreground">
                   {t("pull_request.created_at", {
