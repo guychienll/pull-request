@@ -2,6 +2,7 @@ const resource = {
   en: {
     translation: {
       "navigation.home": "Home",
+      "navigation.settings": "Settings",
       "errors.general": "General Error",
       "pull_request.query_title": "Pull Request",
       "pull_request.query_description":
@@ -26,11 +27,18 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "No data",
+      "settings.use_local_storage": "Use Local Storage",
+      "common.yes": "Yes",
+      "common.no": "No",
+      "actions.save": "Save",
+      "settings.saved": "Saved",
+      "settings.saved_description": "The settings have been saved.",
     },
   },
   "zh-TW": {
     translation: {
       "navigation.home": "首頁",
+      "navigation.settings": "設定",
       "errors.general": "一般錯誤",
       "pull_request.query_title": "Pull Request",
       "pull_request.query_description":
@@ -55,11 +63,18 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "無資料",
+      "settings.use_local_storage": "使用本地儲存",
+      "common.yes": "是",
+      "common.no": "否",
+      "actions.save": "儲存",
+      "settings.saved": "已儲存",
+      "settings.saved_description": "設定已儲存。",
     },
   },
   ja: {
     translation: {
       "navigation.home": "ホーム",
+      "navigation.settings": "設定",
       "errors.general": "一般エラー",
       "pull_request.query_title": "プルリクエスト",
       "pull_request.query_description":
@@ -84,11 +99,18 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "データなし",
+      "settings.use_local_storage": "ローカルストレージを使用",
+      "common.yes": "はい",
+      "common.no": "いいえ",
+      "actions.save": "保存",
+      "settings.saved": "保存",
+      "settings.saved_description": "設定が保存されました。",
     },
   },
   ko: {
     translation: {
       "navigation.home": "홈",
+      "navigation.settings": "설정",
       "errors.general": "일반 오류",
       "pull_request.query_title": "풀 리퀘스트",
       "pull_request.query_description":
@@ -113,11 +135,18 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "데이터 없음",
+      "settings.use_local_storage": "로컬 스토리지 사용",
+      "common.yes": "예",
+      "common.no": "아니오",
+      "actions.save": "저장",
+      "settings.saved": "저장",
+      "settings.saved_description": "설정이 저장되었습니다.",
     },
   },
   th: {
     translation: {
       "navigation.home": "หน้าหลัก",
+      "navigation.settings": "ตั้งค่า",
       "errors.general": "ข้อผิดพลาดทั่วไป",
       "pull_request.query_title": "คำขอดึง",
       "pull_request.query_description":
@@ -142,6 +171,12 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "ไม่มีข้อมูล",
+      "settings.use_local_storage": "ใช้การเก็บข้อมูลที่เก็บไว้ภายในอุปกรณ์",
+      "common.yes": "ใช้",
+      "common.no": "ไม่ใช้",
+      "actions.save": "บันทึก",
+      "settings.saved": "บันทึก",
+      "settings.saved_description": "ตั้งค่าถูกบันทึกแล้ว",
     },
   },
   vi: {
@@ -164,6 +199,7 @@ const resource = {
       "actions.open_pr_in_new_tab": "Mở PR trong tab mới",
       "pull_request.created_at": "Tạo lúc {{date}}",
       "navigation.language": "Ngôn ngữ",
+      "navigation.settings": "Cài đặt",
       "language.zh-TW": "繁體中文",
       "language.en": "English",
       "language.ja": "日本語",
@@ -171,6 +207,12 @@ const resource = {
       "language.th": "ไทย",
       "language.vi": "Tiếng Việt",
       "common.no_data": "Không có dữ liệu",
+      "settings.use_local_storage": "Sử dụng bộ nhớ địa phương",
+      "common.yes": "Có",
+      "common.no": "Không",
+      "actions.save": "Lưu",
+      "settings.saved": "Lưu",
+      "settings.saved_description": "Cài đặt đã được lưu.",
     },
   },
 };

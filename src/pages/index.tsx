@@ -1,12 +1,6 @@
 import CompactPullRequestItem from "@/components/PullRequestItem/Compact";
 import NormalPullRequestItem from "@/components/PullRequestItem/Normal";
 import SideNav from "@/components/SideNav";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Form,
   FormControl,
@@ -27,14 +26,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { LOCAL_STORAGE_KEY } from "@/constants";
 import { PullRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as _ from "lodash";
-import { AArrowDown, ALargeSmall, InboxIcon } from "lucide-react";
+import {
+  AArrowDown,
+  ALargeSmall,
+  ChevronDownIcon,
+  InboxIcon,
+} from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const fetchPullRequests = async ({
@@ -61,6 +66,8 @@ const fetchPullRequests = async ({
   return _.groupBy<PullRequest>(allPullRequests, "base.repo.name");
 };
 
+const FORM_PAYLOAD_LOCAL_STORAGE_KEY = "form-submit-payload";
+
 export default function Home() {
   const { t } = useTranslation("common");
   const [repoName, setRepoName] = useState("");
@@ -72,7 +79,22 @@ export default function Home() {
       repositories: [],
     },
   });
-  const { getValues, handleSubmit } = form;
+  const { getValues, handleSubmit, setValue } = form;
+
+  useEffect(() => {
+    if (
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "false") !== true
+    ) {
+      return;
+    }
+    const savedForm = localStorage.getItem(FORM_PAYLOAD_LOCAL_STORAGE_KEY);
+    if (savedForm) {
+      const parsedForm = JSON.parse(savedForm);
+      setValue("githubToken", parsedForm.githubToken);
+      setValue("owner", parsedForm.owner);
+      setValue("repositories", parsedForm.repositories);
+    }
+  }, [setValue]);
 
   const {
     data: pullRequests,
@@ -86,7 +108,15 @@ export default function Home() {
   });
   const [viewMode, setViewMode] = useState<"compact" | "normal">("compact");
 
-  const onSubmit = handleSubmit(() => {
+  const onSubmit = handleSubmit((data) => {
+    if (
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "false") === true
+    ) {
+      localStorage.setItem(
+        FORM_PAYLOAD_LOCAL_STORAGE_KEY,
+        JSON.stringify(data)
+      );
+    }
     refetch();
   });
 
@@ -136,12 +166,15 @@ export default function Home() {
               {t("view_mode.detailed")}
             </ToggleGroupItem>
           </ToggleGroup>
-          <Accordion type="single" collapsible className="w-full">
+          <Collapsible className="w-full">
             {Object.entries(pullRequests || {}).map(([repo, prs]) => (
-              <AccordionItem key={repo} value={repo}>
-                <AccordionTrigger>{repo}</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-2">
+              <CollapsibleTrigger key={repo} className="w-full">
+                <div className="flex justify-between items-center p-2 border-b">
+                  <span>{repo}</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </div>
+                <CollapsibleContent>
+                  <ul className="space-y-2 p-2">
                     {prs.map((pr) => {
                       return viewMode === "compact" ? (
                         <CompactPullRequestItem key={pr.id} pr={pr} />
@@ -150,10 +183,10 @@ export default function Home() {
                       );
                     })}
                   </ul>
-                </AccordionContent>
-              </AccordionItem>
+                </CollapsibleContent>
+              </CollapsibleTrigger>
             ))}
-          </Accordion>
+          </Collapsible>
         </div>
       );
     }
@@ -161,7 +194,6 @@ export default function Home() {
 
   return (
     <div className="flex">
-      <SideNav isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
       <main className="flex-1">
         <div className="flex flex-col items-center my-4 gap-y-4 max-w-[1024px] mx-auto px-4">
           <Card className="w-full">

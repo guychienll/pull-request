@@ -53,18 +53,36 @@ function SideNav({
           <li>
             <Button
               variant="ghost"
-              className={`w-full justify-start transition-all duration-300 ease-in-out ${
-                isCollapsed ? "px-2" : "px-4"
+              className={`w-full transition-all duration-300 ease-in-out ${
+                isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
               }`}
               onClick={() => router.push("/")}
             >
               <HomeIcon className="h-5 w-5 flex-shrink-0" />
               <span
                 className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
-                  isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+                  isCollapsed ? "hidden" : "inline-block"
                 }`}
               >
                 {t("navigation.home")}
+              </span>
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="ghost"
+              className={`w-full transition-all duration-300 ease-in-out ${
+                isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
+              }`}
+              onClick={() => router.push("/settings")}
+            >
+              <SettingsIcon className="h-5 w-5 flex-shrink-0" />
+              <span
+                className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
+                  isCollapsed ? "hidden" : "inline-block"
+                }`}
+              >
+                {t("navigation.settings")}
               </span>
             </Button>
           </li>
@@ -73,14 +91,14 @@ function SideNav({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className={`w-full justify-start transition-all duration-300 ease-in-out ${
-                    isCollapsed ? "px-2" : "px-4"
+                  className={`w-full transition-all duration-300 ease-in-out ${
+                    isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
                   }`}
                 >
                   <GlobeIcon className="h-5 w-5 flex-shrink-0" />
                   <span
                     className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
-                      isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+                      isCollapsed ? "hidden" : "inline-block"
                     }`}
                   >
                     {t("navigation.language")}
@@ -89,7 +107,10 @@ function SideNav({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {router.locales?.map((lang) => (
-                  <DropdownMenuItem key={lang} onClick={() => changeLanguage(lang)}>
+                  <DropdownMenuItem
+                    key={lang}
+                    onClick={() => changeLanguage(lang)}
+                  >
                     {t(`language.${lang}`)}
                   </DropdownMenuItem>
                 ))}

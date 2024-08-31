@@ -111,7 +111,7 @@ const NormalPullRequestItem: React.FC<{ pr: PullRequest }> = ({ pr }) => {
                   />
                 ),
               }}
-              className="text-sm text-muted-foreground"
+              className="text-sm text-muted-foreground text-left"
             >
               {pr.body}
             </ReactMarkdown>

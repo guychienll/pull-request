@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { appWithTranslation } from "next-i18next";
 import config from "../../next-i18next.config.js";
+import Layout from "./_layout";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ function App({ Component, pageProps }: AppProps) {
       disableTransitionOnChange
     >
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </QueryClientProvider>
     </ThemeProvider>
   );
