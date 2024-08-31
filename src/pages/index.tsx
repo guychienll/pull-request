@@ -45,6 +45,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import HashLoader from "react-spinners/HashLoader";
 
 enum GroupMode {
   GROUP_BY_REPO = "group_by_repo",
@@ -174,11 +175,17 @@ export default function Home() {
   const renderElem = () => {
     if (isLoading && !allPullRequestList) {
       return (
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-        </div>
+        <Card className="w-full">
+          <CardContent>
+            <div className="flex flex-col items-center justify-center p-6 space-y-4">
+              <HashLoader
+                color="#000"
+                size={40}
+                className="flex justify-center items-center"
+              />
+            </div>
+          </CardContent>
+        </Card>
       );
     } else if (
       !allPullRequestList ||
