@@ -14,6 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/router";
+import { isMobile } from "react-device-detect";
+import clsx from "clsx";
 
 function SideNav({
   isCollapsed,
@@ -31,38 +33,46 @@ function SideNav({
 
   return (
     <nav
-      className={`min-h-screen bg-background border-r transition-all duration-300 ease-in-out ${
+      className={clsx(
+        "min-h-screen bg-background border-r transition-all duration-300 ease-in-out",
         isCollapsed ? "w-16" : "w-64"
-      }`}
+      )}
     >
       <div className="p-4 overflow-hidden">
-        <Button
-          variant="ghost"
-          className={`w-full justify-center mb-4 transition-all duration-300 ease-in-out ${
-            isCollapsed ? "p-2" : ""
-          }`}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? (
-            <ChevronRightIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
-          ) : (
-            <ChevronLeftIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
-          )}
-        </Button>
+        {!isMobile && (
+          <Button
+            variant="ghost"
+            className={clsx(
+              "w-full justify-center mb-4 transition-all duration-300 ease-in-out",
+              {
+                "p-2": isCollapsed,
+              }
+            )}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? (
+              <ChevronRightIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
+            ) : (
+              <ChevronLeftIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
+            )}
+          </Button>
+        )}
         <ul className="space-y-4">
           <li>
             <Button
               variant="ghost"
-              className={`w-full transition-all duration-300 ease-in-out ${
+              className={clsx(
+                "w-full transition-all duration-300 ease-in-out",
                 isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-              }`}
+              )}
               onClick={() => router.push("/")}
             >
               <HomeIcon className="h-5 w-5 flex-shrink-0" />
               <span
-                className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
+                className={clsx(
+                  "ml-3 text-lg transition-all duration-300 ease-in-out",
                   isCollapsed ? "hidden" : "inline-block"
-                }`}
+                )}
               >
                 {t("navigation.home")}
               </span>
@@ -71,16 +81,18 @@ function SideNav({
           <li>
             <Button
               variant="ghost"
-              className={`w-full transition-all duration-300 ease-in-out ${
+              className={clsx(
+                "w-full transition-all duration-300 ease-in-out",
                 isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-              }`}
+              )}
               onClick={() => router.push("/settings")}
             >
               <SettingsIcon className="h-5 w-5 flex-shrink-0" />
               <span
-                className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
+                className={clsx(
+                  "ml-3 text-lg transition-all duration-300 ease-in-out",
                   isCollapsed ? "hidden" : "inline-block"
-                }`}
+                )}
               >
                 {t("navigation.settings")}
               </span>
@@ -91,15 +103,17 @@ function SideNav({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className={`w-full transition-all duration-300 ease-in-out ${
+                  className={clsx(
+                    "w-full transition-all duration-300 ease-in-out",
                     isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-                  }`}
+                  )}
                 >
                   <GlobeIcon className="h-5 w-5 flex-shrink-0" />
                   <span
-                    className={`ml-3 text-lg transition-all duration-300 ease-in-out ${
+                    className={clsx(
+                      "ml-3 text-lg transition-all duration-300 ease-in-out",
                       isCollapsed ? "hidden" : "inline-block"
-                    }`}
+                    )}
                   >
                     {t("navigation.language")}
                   </span>
