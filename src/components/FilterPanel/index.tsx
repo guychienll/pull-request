@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GroupMode, SortMode, ViewMode } from "@/types";
+import clsx from "clsx";
 import {
   AArrowDown,
   ALargeSmall,
@@ -29,7 +30,12 @@ function FilterPanel({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-row gap-x-2">
+    <div
+      className={clsx("flex", {
+        "flex-col gap-y-2": isMobile,
+        "flex-row gap-x-2": !isMobile,
+      })}
+    >
       <ToggleGroup
         type="single"
         value={groupMode}
