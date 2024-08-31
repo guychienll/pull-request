@@ -55,6 +55,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
+import { isMobile } from "react-device-detect";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
 
@@ -405,13 +406,21 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div className="flex flex-row gap-x-2">
+          <div
+            className="flex flex-row gap-x-2"
+            style={{
+              flexDirection: isMobile ? "column" : "row",
+            }}
+          >
             <ToggleGroup
               type="single"
               value={groupMode}
               defaultValue={GroupMode.GROUP_BY_REPO}
               onValueChange={(value) => setGroupMode(value as GroupMode)}
               className="mb-4"
+              style={{
+                flexDirection: isMobile ? "column" : "row",
+              }}
             >
               <ToggleGroupItem value={GroupMode.GROUP_BY_REPO}>
                 <GroupIcon className="w-4 h-4 mr-2" />
@@ -431,6 +440,9 @@ export default function Home() {
               defaultValue={ViewMode.COMPACT}
               onValueChange={(value) => setViewMode(value as ViewMode)}
               className="mb-4"
+              style={{
+                flexDirection: isMobile ? "column" : "row",
+              }}
             >
               <ToggleGroupItem value={ViewMode.COMPACT}>
                 <ALargeSmall className="w-4 h-4 mr-2" />
@@ -450,6 +462,9 @@ export default function Home() {
               defaultValue={SortMode.CREATED_AT_ASC}
               onValueChange={(value) => setSortMode(value as SortMode)}
               className="mb-4"
+              style={{
+                flexDirection: isMobile ? "column" : "row",
+              }}
             >
               <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
                 <CalendarArrowUp className="w-4 h-4 mr-2" />
