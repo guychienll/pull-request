@@ -47,7 +47,7 @@ function FilterPanel({
         </ToggleGroupItem>
       </ToggleGroup>
 
-      <Separator orientation="vertical" />
+      {!isMobile && <Separator orientation="vertical" />}
 
       <ToggleGroup
         type="single"
@@ -66,7 +66,7 @@ function FilterPanel({
         </ToggleGroupItem>
       </ToggleGroup>
 
-      <Separator orientation="vertical" />
+      {!isMobile && <Separator orientation="vertical" />}
 
       <ToggleGroup
         type="single"
