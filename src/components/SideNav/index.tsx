@@ -88,12 +88,11 @@ function SideNav({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => changeLanguage("zh-TW")}>
-                  {t("language.zh-TW")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage("en")}>
-                  {t("language.en")}
-                </DropdownMenuItem>
+                {router.locales?.map((lang) => (
+                  <DropdownMenuItem key={lang} onClick={() => changeLanguage(lang)}>
+                    {t(`language.${lang}`)}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </li>

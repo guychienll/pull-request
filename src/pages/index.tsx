@@ -31,7 +31,7 @@ import { PullRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as _ from "lodash";
-import { AArrowDown, ALargeSmall } from "lucide-react";
+import { AArrowDown, ALargeSmall, InboxIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState } from "react";
@@ -103,8 +103,19 @@ export default function Home() {
           <Skeleton className="h-4 w-full" />
         </div>
       );
-    } else if (!pullRequests) {
-      return <div>{t("common.no_data")}</div>;
+    } else if (!pullRequests || Object.keys(pullRequests).length === 0) {
+      return (
+        <Card className="w-full">
+          <CardContent>
+            <div className="flex flex-col items-center justify-center p-6 space-y-4">
+              <InboxIcon className="w-12 h-12 text-gray-400" />
+              <p className="text-lg font-medium text-gray-600">
+                {t("common.no_data")}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      );
     } else {
       return (
         <div className="space-y-2 w-full">
