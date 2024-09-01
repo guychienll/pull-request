@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import SideNav from "@/components/SideNav";
 
 interface LayoutProps {
@@ -15,6 +15,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const title = `PR Platform ${
     router.pathname === "/" ? "" : `| ${t(`title.${segment}`)}`
   }`;
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-B6XESXE041";
+    script.async = true;
+    script.onload = () => {
+      window.dataLayer = window.dataLayer || [];
+      const gtag = function (...args: any[]) {
+        window.dataLayer.push(...args);
+      };
+      gtag("js", new Date());
+      gtag("config", "G-B6XESXE041");
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="flex max-w-screen max-w-[1024px] mx-auto">
