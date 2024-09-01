@@ -17,7 +17,8 @@ const resource = {
       "form.repository_name": "Repository Name",
       "form.enter_repository_name": "Enter Repository Name",
       "form.copied_url": "Copied URL",
-      "form.copied_url_description": "The URL has been copied to your clipboard.",
+      "form.copied_url_description":
+        "The URL has been copied to your clipboard.",
       "actions.copy_url": "Copy URL",
       "actions.add": "Add",
       "actions.query": "Query",

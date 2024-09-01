@@ -7,7 +7,7 @@ import {
   GroupIcon,
   Maximize,
   Minimize,
-  UserIcon
+  UserIcon,
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
 
@@ -45,6 +45,7 @@ function FilterPanel({
             {t("group_mode.group_by_repo")}
           </span>
         </ToggleGroupItem>
+
         <ToggleGroupItem
           className="flex flex-row gap-x-2"
           value={GroupMode.GROUP_BY_AUTHOR}
@@ -65,13 +66,19 @@ function FilterPanel({
         onValueChange={(value) => setViewMode(value as ViewMode)}
         className="mb-4"
       >
-        <ToggleGroupItem value={ViewMode.COMPACT}>
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={ViewMode.COMPACT}
+        >
           <Minimize className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("view_mode.compact")}
           </span>
         </ToggleGroupItem>
-        <ToggleGroupItem value={ViewMode.NORMAL}>
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={ViewMode.NORMAL}
+        >
           <Maximize className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("view_mode.detailed")}
@@ -88,13 +95,19 @@ function FilterPanel({
         onValueChange={(value) => setSortMode(value as SortMode)}
         className="mb-4"
       >
-        <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={SortMode.CREATED_AT_ASC}
+        >
           <CalendarArrowUp className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("sort_mode.created_at_asc")}
           </span>
         </ToggleGroupItem>
-        <ToggleGroupItem value={SortMode.CREATED_AT_DESC}>
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={SortMode.CREATED_AT_DESC}
+        >
           <CalendarArrowDown className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("sort_mode.created_at_desc")}

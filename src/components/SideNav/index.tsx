@@ -8,7 +8,10 @@ import {
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { GlobeIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+
+const ThemeToggle = dynamic(() => import("../ThemeToggle"), { ssr: false });
 
 function SideNav() {
   const { t } = useTranslation("common");
@@ -70,6 +73,9 @@ function SideNav() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+        </li>
+        <li>
+          <ThemeToggle />
         </li>
       </ul>
     </nav>

@@ -1,10 +1,5 @@
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "next-i18next";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -12,9 +7,14 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LOCAL_STORAGE_KEY } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 interface SettingsFormValues {
   useLocalStorage: boolean;
@@ -40,7 +40,7 @@ const Settings = () => {
   const onSubmit = (data: SettingsFormValues) => {
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
-      JSON.stringify(data.useLocalStorage)
+      JSON.stringify(data.useLocalStorage),
     );
     toast({
       title: t("settings.saved"),
