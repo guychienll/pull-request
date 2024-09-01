@@ -3,6 +3,8 @@ const resource = {
     translation: {
       "title.home": "Home",
       "title.settings": "Settings",
+      "pull_request.how_to_get_token_link":
+        "How to get GitHub Token (need repo access right)",
       description: "PR Platform | A platform to aggregate all Pull Request",
       "navigation.home": "Home",
       "navigation.settings": "Settings",
@@ -53,6 +55,8 @@ const resource = {
     translation: {
       "title.home": "首頁",
       "title.settings": "設定",
+      "pull_request.how_to_get_token_link":
+        "如何取得 GitHub Token (需要 repo 存取權限)",
       description: "PR Platform | 聚集所有 Pull Request 的平台",
       "navigation.home": "首頁",
       "navigation.settings": "設定",
@@ -102,6 +106,8 @@ const resource = {
     translation: {
       "title.home": "ホーム",
       "title.settings": "設定",
+      "pull_request.how_to_get_token_link":
+        "GitHub Token の取得方法 (リポジトリへのアクセス権限が必要)",
       description: "PR Platform | プルリクエストを集約するプラットフォーム",
       "navigation.home": "ホーム",
       "navigation.settings": "設定",
@@ -151,6 +157,8 @@ const resource = {
     translation: {
       "title.home": "홈",
       "title.settings": "설정",
+      "pull_request.how_to_get_token_link":
+        "GitHub Token 의 받는 방법 (리포지토리 접근 권한 필요)",
       description: "PR Platform | 풀 리퀘스트를 집계하는 플랫폼",
       "navigation.home": "홈",
       "navigation.settings": "설정",
@@ -200,6 +208,8 @@ const resource = {
     translation: {
       "title.home": "หน้าหลัก",
       "title.settings": "ตั้งค่า",
+      "pull_request.how_to_get_token_link":
+        "วิธีการรับ GitHub Token (ต้องการสิทธิ์เข้าถึงระบบคลังข้อมูลของระบบคลังข้อมูล)",
       description: "PR Platform | พอร์ทัลที่รวมคำขอดึงทั้งหมด",
       "navigation.home": "หน้าหลัก",
       "navigation.settings": "ตั้งค่า",
@@ -249,6 +259,8 @@ const resource = {
     translation: {
       "title.home": "Trang chủ",
       "title.settings": "Cài đặt",
+      "pull_request.how_to_get_token_link":
+        "Cách lấy mã thông báo GitHub (cần quyền truy cập kho lưu trữ)",
       description: "PR Platform | Nền tảng tổng hợp tất cả các yêu cầu kéo",
       "navigation.home": "Trang chủ",
       "errors.general": "Lỗi chung",

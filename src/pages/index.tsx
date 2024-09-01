@@ -40,6 +40,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
 import FilterPanel from "@/components/FilterPanel";
+import Link from "next/link";
 
 const fetchPullRequests = async ({
   githubToken,
@@ -57,17 +58,17 @@ const fetchPullRequests = async ({
           Authorization: `token ${githubToken}`,
           Accept: "application/vnd.github.v3+json",
         },
-      })
-    )
+      }),
+    ),
   );
 
   const allPullRequests = _.flatten(
     res
       .filter(
         (result): result is PromiseFulfilledResult<any> =>
-          result.status === "fulfilled"
+          result.status === "fulfilled",
       )
-      .map((result) => result.value.data)
+      .map((result) => result.value.data),
   );
 
   return allPullRequests;
@@ -94,7 +95,7 @@ export default function Home() {
   });
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.COMPACT);
   const [groupMode, setGroupMode] = useState<GroupMode>(
-    GroupMode.GROUP_BY_REPO
+    GroupMode.GROUP_BY_REPO,
   );
   const [sortMode, setSortMode] = useState<SortMode>(SortMode.CREATED_AT_ASC);
   const { getValues, handleSubmit, setValue, reset } = form;
@@ -143,7 +144,7 @@ export default function Home() {
     const sortedPullRequestList = _.orderBy(
       allPullRequestList,
       "created_at",
-      sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc"
+      sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc",
     );
 
     return groupMode === GroupMode.GROUP_BY_REPO
@@ -163,7 +164,7 @@ export default function Home() {
     ) {
       localStorage.setItem(
         FORM_PAYLOAD_LOCAL_STORAGE_KEY,
-        JSON.stringify(data)
+        JSON.stringify(data),
       );
     }
     refetch();
@@ -229,7 +230,7 @@ export default function Home() {
                           <CompactPullRequestItem key={pr.id} pr={pr} />
                         ) : (
                           <NormalPullRequestItem key={pr.id} pr={pr} />
-                        )
+                        ),
                       )}
                     </ul>
                   </TableCell>
@@ -255,6 +256,15 @@ export default function Home() {
             <CardHeader className="flex flex-col lg:flex-row justify-between">
               <div className="px-2 flex-col gap-y-2 flex">
                 <CardTitle>{t("pull_request.query_title")}</CardTitle>
+                <CardDescription>
+                  <Link
+                    target="_blank"
+                    href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic"
+                    className="text-blue-500 underline"
+                  >
+                    {t("pull_request.how_to_get_token_link")}
+                  </Link>
+                </CardDescription>
                 <CardDescription>
                   {t("pull_request.query_description")}
                 </CardDescription>
@@ -357,8 +367,8 @@ export default function Home() {
                                     onClick={() =>
                                       field.onChange(
                                         field.value.filter(
-                                          (_, i) => i !== index
-                                        )
+                                          (_, i) => i !== index,
+                                        ),
                                       )
                                     }
                                   >
