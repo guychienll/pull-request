@@ -23,23 +23,14 @@ function SideNav() {
 
   return (
     <nav className="flex flex-row w-full h-[48px]">
-      <div className="flex items-center gap-x-2 px-2 min-w-[160px]">
+      <div
+        className="flex items-center gap-x-2 px-2 min-w-[160px]"
+        onClick={() => router.push("/")}
+      >
         <GitHubLogoIcon className="h-6 w-6" />
         <span className="text-lg font-bold">PR Platform</span>
       </div>
       <ul className="flex justify-start flex-row items-center w-full">
-        <li>
-          <Button
-            className="flex gap-x-2 items-center"
-            variant="ghost"
-            onClick={() => router.push("/")}
-          >
-            <HomeIcon className="h-5 w-5 flex-shrink-0" />
-            <span className="md:inline-block hidden">
-              {t("navigation.home")}
-            </span>
-          </Button>
-        </li>
         <li>
           <Button
             className="flex gap-x-2 items-center"

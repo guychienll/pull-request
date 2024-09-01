@@ -21,7 +21,7 @@ function ThemeToggle() {
 
   return (
     <Button
-      className="md:flex items-center justify-start md:visible hidden"
+      className="flex items-center justify-start visible"
       variant="ghost"
       onClick={toggleTheme}
     >
