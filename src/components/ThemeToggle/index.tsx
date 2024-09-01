@@ -1,16 +1,16 @@
 import { MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-      setTheme(storedTheme);
-    }
+    const storedTheme = localStorage.getItem("theme") || "light";
+    setTheme(storedTheme);
+    setMounted(true);
   }, [setTheme]);
 
   const toggleTheme = () => {
@@ -18,6 +18,8 @@ function ThemeToggle() {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
+
+  if (!mounted) return null;
 
   return (
     <Button
