@@ -1,29 +1,16 @@
 import { Button } from "@/components/ui/button";
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  HomeIcon,
-  SettingsIcon,
-  GlobeIcon,
-} from "lucide-react";
-import { useTranslation } from "next-i18next";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { GlobeIcon, HomeIcon, SettingsIcon } from "lucide-react";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { isMobile } from "react-device-detect";
-import clsx from "clsx";
 
-function SideNav({
-  isCollapsed,
-  setIsCollapsed,
-}: {
-  isCollapsed: boolean;
-  setIsCollapsed: (isCollapsed: boolean) => void;
-}) {
+function SideNav() {
   const { t } = useTranslation("common");
   const router = useRouter();
 
@@ -32,107 +19,59 @@ function SideNav({
   };
 
   return (
-    <nav
-      className={clsx(
-        "min-h-screen bg-background border-r transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-16" : "w-64"
-      )}
-    >
-      <div className="p-4 overflow-hidden">
-        {!isMobile && (
-          <Button
-            variant="ghost"
-            className={clsx(
-              "w-full justify-center mb-4 transition-all duration-300 ease-in-out",
-              {
-                "p-2": isCollapsed,
-              }
-            )}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? (
-              <ChevronRightIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
-            ) : (
-              <ChevronLeftIcon className="h-5 w-5 transition-transform duration-300 ease-in-out" />
-            )}
-          </Button>
-        )}
-        <ul className="space-y-4">
-          <li>
-            <Button
-              variant="ghost"
-              className={clsx(
-                "w-full transition-all duration-300 ease-in-out",
-                isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-              )}
-              onClick={() => router.push("/")}
-            >
-              <HomeIcon className="h-5 w-5 flex-shrink-0" />
-              <span
-                className={clsx(
-                  "ml-3 text-lg transition-all duration-300 ease-in-out",
-                  isCollapsed ? "hidden" : "inline-block"
-                )}
-              >
-                {t("navigation.home")}
-              </span>
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className={clsx(
-                "w-full transition-all duration-300 ease-in-out",
-                isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-              )}
-              onClick={() => router.push("/settings")}
-            >
-              <SettingsIcon className="h-5 w-5 flex-shrink-0" />
-              <span
-                className={clsx(
-                  "ml-3 text-lg transition-all duration-300 ease-in-out",
-                  isCollapsed ? "hidden" : "inline-block"
-                )}
-              >
-                {t("navigation.settings")}
-              </span>
-            </Button>
-          </li>
-          <li>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={clsx(
-                    "w-full transition-all duration-300 ease-in-out",
-                    isCollapsed ? "px-2 justify-center" : "px-4 justify-start"
-                  )}
-                >
-                  <GlobeIcon className="h-5 w-5 flex-shrink-0" />
-                  <span
-                    className={clsx(
-                      "ml-3 text-lg transition-all duration-300 ease-in-out",
-                      isCollapsed ? "hidden" : "inline-block"
-                    )}
-                  >
-                    {t("navigation.language")}
-                  </span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {router.locales?.map((lang) => (
-                  <DropdownMenuItem
-                    key={lang}
-                    onClick={() => changeLanguage(lang)}
-                  >
-                    {t(`language.${lang}`)}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </li>
-        </ul>
+    <nav className="flex flex-row w-full h-[48px]">
+      <div className="flex items-center gap-x-2 px-2 min-w-[160px]">
+        <GitHubLogoIcon className="h-6 w-6" />
+        <span className="text-lg font-bold">PR Platform</span>
       </div>
+      <ul className="flex justify-start flex-row items-center w-full">
+        <li>
+          <Button
+            className="flex gap-x-2 items-center"
+            variant="ghost"
+            onClick={() => router.push("/")}
+          >
+            <HomeIcon className="h-5 w-5 flex-shrink-0" />
+            <span className="md:inline-block hidden">
+              {t("navigation.home")}
+            </span>
+          </Button>
+        </li>
+        <li>
+          <Button
+            className="flex gap-x-2 items-center"
+            variant="ghost"
+            onClick={() => router.push("/settings")}
+          >
+            <SettingsIcon className="h-5 w-5 flex-shrink-0" />
+            <span className="md:inline-block hidden">
+              {t("navigation.settings")}
+            </span>
+          </Button>
+        </li>
+        <li>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="flex gap-x-2 items-center" variant="ghost">
+                <GlobeIcon className="h-5 w-5 flex-shrink-0" />
+                <span className="md:inline-block hidden">
+                  {t("navigation.language")}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {router.locales?.map((lang) => (
+                <DropdownMenuItem
+                  key={lang}
+                  onClick={() => changeLanguage(lang)}
+                >
+                  {t(`language.${lang}`)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </li>
+      </ul>
     </nav>
   );
 }

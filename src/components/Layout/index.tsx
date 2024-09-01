@@ -1,20 +1,14 @@
 import { Toaster } from "@/components/ui/toaster";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { isMobile } from "react-device-detect";
-import dynamic from "next/dynamic";
-
-const SideNav = dynamic(() => import("@/components/SideNav"), {
-  ssr: false,
-});
+import React from "react";
+import SideNav from "@/components/SideNav";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
   const router = useRouter();
   const { t } = useTranslation();
   const segment = router.pathname.split("/")[1];
@@ -23,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }`;
 
   return (
-    <div className="flex max-w-screen overflow-hidden">
+    <div className="flex max-w-screen max-w-[1024px] mx-auto">
       <title>{title}</title>
       <meta name="description" content={t("description")} />
       <meta property="og:title" content={title} />
@@ -32,11 +26,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <SideNav
-        isCollapsed={isMobile ? true : isCollapsed}
-        setIsCollapsed={isMobile ? () => 0 : setIsCollapsed}
-      />
-      <main className="flex-1">{children}</main>
+      <div className="flex flex-col w-full">
+        <SideNav />
+        <main className="w-full">{children}</main>
+      </div>
       <Toaster />
     </div>
   );

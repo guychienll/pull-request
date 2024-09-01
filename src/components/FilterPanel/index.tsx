@@ -1,7 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GroupMode, SortMode, ViewMode } from "@/types";
-import clsx from "clsx";
 import {
   AArrowDown,
   ALargeSmall,
@@ -11,7 +10,6 @@ import {
   UserIcon,
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
-import { isMobile } from "react-device-detect";
 
 function FilterPanel({
   groupMode,
@@ -30,12 +28,7 @@ function FilterPanel({
 }) {
   const { t } = useTranslation();
   return (
-    <div
-      className={clsx("flex", {
-        "flex-col gap-y-2": isMobile,
-        "flex-row gap-x-2": !isMobile,
-      })}
-    >
+    <div className="flex flex-col gap-y-2 md:flex-row md:gap-x-2 md:items-center">
       <ToggleGroup
         type="single"
         value={groupMode}
@@ -43,17 +36,27 @@ function FilterPanel({
         onValueChange={(value) => setGroupMode(value as GroupMode)}
         className="mb-4"
       >
-        <ToggleGroupItem value={GroupMode.GROUP_BY_REPO}>
-          <GroupIcon className="w-4 h-4 mr-2" />
-          {!isMobile && t("group_mode.group_by_repo")}
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={GroupMode.GROUP_BY_REPO}
+        >
+          <GroupIcon className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("group_mode.group_by_repo")}
+          </span>
         </ToggleGroupItem>
-        <ToggleGroupItem value={GroupMode.GROUP_BY_AUTHOR}>
-          <UserIcon className="w-4 h-4 mr-2" />
-          {!isMobile && t("group_mode.group_by_author")}
+        <ToggleGroupItem
+          className="flex flex-row gap-x-2"
+          value={GroupMode.GROUP_BY_AUTHOR}
+        >
+          <UserIcon className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("group_mode.group_by_author")}
+          </span>
         </ToggleGroupItem>
       </ToggleGroup>
 
-      {!isMobile && <Separator orientation="vertical" />}
+      <Separator orientation="vertical" className="md:hidden" />
 
       <ToggleGroup
         type="single"
@@ -63,16 +66,20 @@ function FilterPanel({
         className="mb-4"
       >
         <ToggleGroupItem value={ViewMode.COMPACT}>
-          <ALargeSmall className="w-4 h-4 mr-2" />
-          {!isMobile && t("view_mode.compact")}
+          <ALargeSmall className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("view_mode.compact")}
+          </span>
         </ToggleGroupItem>
         <ToggleGroupItem value={ViewMode.NORMAL}>
-          <AArrowDown className="w-4 h-4 mr-2" />
-          {!isMobile && t("view_mode.detailed")}
+          <AArrowDown className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("view_mode.detailed")}
+          </span>
         </ToggleGroupItem>
       </ToggleGroup>
 
-      {!isMobile && <Separator orientation="vertical" />}
+      <Separator orientation="vertical" className="md:hidden" />
 
       <ToggleGroup
         type="single"
@@ -82,12 +89,16 @@ function FilterPanel({
         className="mb-4"
       >
         <ToggleGroupItem value={SortMode.CREATED_AT_ASC}>
-          <CalendarArrowUp className="w-4 h-4 mr-2" />
-          {!isMobile && t("sort_mode.created_at_asc")}
+          <CalendarArrowUp className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("sort_mode.created_at_asc")}
+          </span>
         </ToggleGroupItem>
         <ToggleGroupItem value={SortMode.CREATED_AT_DESC}>
-          <CalendarArrowDown className="w-4 h-4 mr-2" />
-          {!isMobile && t("sort_mode.created_at_desc")}
+          <CalendarArrowDown className="w-4 h-4" />
+          <span className="md:inline-block hidden">
+            {t("sort_mode.created_at_desc")}
+          </span>
         </ToggleGroupItem>
       </ToggleGroup>
     </div>

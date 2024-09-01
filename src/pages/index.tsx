@@ -39,11 +39,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
-import dynamic from "next/dynamic";
-
-const FilterPanel = dynamic(() => import("@/components/FilterPanel"), {
-  ssr: false,
-});
+import FilterPanel from "@/components/FilterPanel";
 
 const fetchPullRequests = async ({
   githubToken,
@@ -210,7 +206,7 @@ export default function Home() {
       );
     } else {
       return (
-        <div className="space-y-2 w-full">
+        <div className="overflow-x-auto max-w-full">
           <Table>
             <TableHeader>
               <TableRow>
@@ -246,35 +242,41 @@ export default function Home() {
     }
   };
 
+  const isShowCopyUrlButton =
+    getValues().githubToken &&
+    getValues().owner &&
+    getValues().repositories.length > 0;
+
   return (
-    <div className="flex">
+    <div className="flex flex-col lg:flex-row">
       <main className="flex-1">
-        <div className="flex flex-col items-center my-4 gap-y-4 max-w-[1024px] mx-auto px-4">
+        <div className="flex flex-col items-center my-4 gap-y-4 px-2 sm:px-4">
           <Card className="w-full">
-            <CardHeader className="flex flex-row justify-between">
-              <div>
+            <CardHeader className="flex flex-col lg:flex-row justify-between">
+              <div className="px-2 flex-col gap-y-2 flex">
                 <CardTitle>{t("pull_request.query_title")}</CardTitle>
                 <CardDescription>
                   {t("pull_request.query_description")}
                 </CardDescription>
               </div>
-              {getValues().githubToken &&
-                getValues().owner &&
-                getValues().repositories.length > 0 && (
-                  <Button
-                    onClick={() => {
-                      const url = window.location.href;
-                      navigator.clipboard.writeText(url);
-                      toast({
-                        title: t("form.copied_url"),
-                        description: t("form.copied_url_description"),
-                      });
-                    }}
-                  >
-                    <CopyIcon className="w-4 h-4 mr-2" />
+              {isShowCopyUrlButton && (
+                <Button
+                  className="flex flex-row gap-x-2 mt-4 lg:mt-0"
+                  onClick={() => {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url);
+                    toast({
+                      title: t("form.copied_url"),
+                      description: t("form.copied_url_description"),
+                    });
+                  }}
+                >
+                  <CopyIcon className="w-4 h-4" />
+                  <span className="hidden md:block">
                     {t("actions.copy_url")}
-                  </Button>
-                )}
+                  </span>
+                </Button>
+              )}
             </CardHeader>
             <CardContent className="space-y-4">
               <Form {...form}>
