@@ -2,12 +2,12 @@ import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GroupMode, SortMode, ViewMode } from "@/types";
 import {
-  AArrowDown,
-  ALargeSmall,
   CalendarArrowDown,
   CalendarArrowUp,
   GroupIcon,
-  UserIcon,
+  Maximize,
+  Minimize,
+  UserIcon
 } from "lucide-react";
 import { useTranslation } from "next-i18next";
 
@@ -28,7 +28,7 @@ function FilterPanel({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col gap-y-2 md:flex-row md:gap-x-2 md:items-center">
+    <div className="flex gap-y-2 md:flex-row md:gap-x-2 md:items-center">
       <ToggleGroup
         type="single"
         value={groupMode}
@@ -66,13 +66,13 @@ function FilterPanel({
         className="mb-4"
       >
         <ToggleGroupItem value={ViewMode.COMPACT}>
-          <ALargeSmall className="w-4 h-4" />
+          <Minimize className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("view_mode.compact")}
           </span>
         </ToggleGroupItem>
         <ToggleGroupItem value={ViewMode.NORMAL}>
-          <AArrowDown className="w-4 h-4" />
+          <Maximize className="w-4 h-4" />
           <span className="md:inline-block hidden">
             {t("view_mode.detailed")}
           </span>
