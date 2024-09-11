@@ -6,13 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const {
-    githubToken,
-    owner,
-    repositories,
-    slackWebhook,
-    filter = "",
-  } = req.query;
+  const { githubToken, owner, repositories, slackWebhook } = req.query;
   const repos = (repositories as string).split(",");
 
   const response = await Promise.allSettled(
@@ -36,7 +30,7 @@ export default async function handler(
   );
 
   const filteredPullRequests = allPullRequests.filter((pr) =>
-    pr.title.includes(filter as string)
+    pr.labels.some((label: any) => label.name === "reviewable")
   );
 
   const message = {
