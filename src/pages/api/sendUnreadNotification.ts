@@ -29,9 +29,13 @@ export default async function handler(
       .map((result) => result.value.data)
   );
 
-  const filteredPullRequests = allPullRequests.filter((pr) =>
-    pr.labels.some((label: any) => label.name === "reviewable")
-  );
+  const filteredPullRequests = allPullRequests
+    .filter((pr) => pr.labels.some((label: any) => label.name === "reviewable"))
+    .filter((pr) => !pr.draft)
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
   const message = {
     text: "Sprint 需要 review 的 PR",
