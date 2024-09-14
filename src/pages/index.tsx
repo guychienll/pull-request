@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -33,7 +34,7 @@ import { GroupMode, PullRequest, SortMode, ViewMode } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as _ from "lodash";
-import { CopyIcon, InboxIcon } from "lucide-react";
+import { CopyIcon, InboxIcon, XIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -43,6 +44,7 @@ import HashLoader from "react-spinners/HashLoader";
 import FilterPanel from "@/components/FilterPanel";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
+import Fuse from "fuse.js";
 
 const fetchPullRequests = async ({
   githubToken,
@@ -96,6 +98,7 @@ export default function Home() {
   const { t } = useTranslation("common");
   const [repoName, setRepoName] = useState("");
   const { toast } = useToast();
+  const [keyword, setKeyword] = useState("");
   const form = useForm<{
     githubToken: string;
     owner: string;
@@ -171,16 +174,27 @@ export default function Home() {
   });
 
   const pullRequestList = useMemo(() => {
+    if (!allPullRequestList) return {};
+
     const sortedPullRequestList = _.orderBy(
       allPullRequestList,
       "created_at",
       sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc"
     );
 
+    const fuse = new Fuse(sortedPullRequestList, {
+      keys: ["title", "base.repo.name", "body", "user.login"],
+      threshold: 0.3,
+    });
+
+    const filteredPullRequestList = keyword
+      ? fuse.search(keyword).map((result) => result.item)
+      : sortedPullRequestList;
+
     return groupMode === GroupMode.GROUP_BY_REPO
-      ? _.groupBy<PullRequest>(sortedPullRequestList, "base.repo.name")
-      : _.groupBy<PullRequest>(sortedPullRequestList, "user.login");
-  }, [allPullRequestList, groupMode, sortMode]);
+      ? _.groupBy<PullRequest>(filteredPullRequestList, "base.repo.name")
+      : _.groupBy<PullRequest>(filteredPullRequestList, "user.login");
+  }, [allPullRequestList, groupMode, sortMode, keyword]);
 
   const onSubmit = handleSubmit((data) => {
     const queryParams = new URLSearchParams({
@@ -238,7 +252,7 @@ export default function Home() {
       );
     } else {
       return (
-        <div className="overflow-x-auto max-w-full">
+        <div className="overflow-x-auto w-full max-w-[1024px]">
           <Table>
             <TableHeader>
               <TableRow>
@@ -247,13 +261,15 @@ export default function Home() {
                     ? t("common.repository")
                     : t("common.author")}
                 </TableHead>
-                <TableHead>{t("common.content")}</TableHead>
+                <TableHead className="w-7/8">{t("common.content")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Object.entries(pullRequestList || {}).map(([repo, prs]) => (
-                <TableRow key={repo}>
-                  <TableCell>{repo}</TableCell>
+              {Object.entries(pullRequestList || {}).map(([name, prs]) => (
+                <TableRow key={name}>
+                  <TableCell className="w-40 break-before-all min-w-28">
+                    {name}
+                  </TableCell>
                   <TableCell>
                     <ul className="space-y-2">
                       {prs.map((pr) =>
@@ -440,14 +456,48 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <FilterPanel
-            groupMode={groupMode}
-            setGroupMode={setGroupMode}
-            setSortMode={setSortMode}
-            setViewMode={setViewMode}
-            sortMode={sortMode}
-            viewMode={viewMode}
-          />
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>{t("form.keyword_search_label")}</CardTitle>
+              <CardDescription>
+                {t("form.keyword_search_description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                <Input
+                  id="keyword-search"
+                  placeholder={t("form.enter_keyword")}
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  className="pr-12 pl-4 py-3 text-base rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  aria-label={t("form.keyword_search_aria_label")}
+                />
+                {keyword && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1 transition-colors duration-200"
+                    onClick={() => setKeyword("")}
+                    aria-label={t("form.clear_keyword_search")}
+                  >
+                    <XIcon className="h-5 w-5 text-gray-500" />
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-start">
+              <FilterPanel
+                groupMode={groupMode}
+                setGroupMode={setGroupMode}
+                setSortMode={setSortMode}
+                setViewMode={setViewMode}
+                sortMode={sortMode}
+                viewMode={viewMode}
+              />
+            </CardFooter>
+          </Card>
 
           {renderElem()}
         </div>
