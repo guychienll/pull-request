@@ -35,12 +35,12 @@ const Settings = () => {
     if (storedValue !== null) {
       form.setValue("useLocalStorage", JSON.parse(storedValue));
     }
-  }, []);
+  }, [form]);
 
   const onSubmit = (data: SettingsFormValues) => {
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
-      JSON.stringify(data.useLocalStorage),
+      JSON.stringify(data.useLocalStorage)
     );
     toast({
       title: t("settings.saved"),

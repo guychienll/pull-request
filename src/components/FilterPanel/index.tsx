@@ -20,9 +20,9 @@ function FilterPanel({
   viewMode,
 }: {
   groupMode: GroupMode;
-  setGroupMode: (value: GroupMode) => void;
-  setSortMode: (value: SortMode) => void;
-  setViewMode: (value: ViewMode) => void;
+  setGroupMode: (_value: GroupMode) => void;
+  setSortMode: (_value: SortMode) => void;
+  setViewMode: (_value: ViewMode) => void;
   sortMode: SortMode;
   viewMode: ViewMode;
 }) {

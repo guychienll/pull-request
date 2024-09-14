@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { GlobeIcon, HomeIcon, SettingsIcon } from "lucide-react";
+import { GlobeIcon, SettingsIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";

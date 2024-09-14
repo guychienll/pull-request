@@ -12,6 +12,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,16 +42,27 @@ import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
 import FilterPanel from "@/components/FilterPanel";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const fetchPullRequests = async ({
   githubToken,
   owner,
   repositories,
+  excludeOwnPRs,
 }: {
   githubToken: string;
   owner: string;
   repositories: string[];
+  excludeOwnPRs: boolean;
 }) => {
+  const userResponse = await axios.get("https://api.github.com/user", {
+    headers: {
+      Authorization: `token ${githubToken}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+  const currentUser = userResponse.data.login;
+
   const res = await Promise.allSettled(
     repositories.map((repository) =>
       axios.get(`https://api.github.com/repos/${owner}/${repository}/pulls`, {
@@ -58,27 +70,29 @@ const fetchPullRequests = async ({
           Authorization: `token ${githubToken}`,
           Accept: "application/vnd.github.v3+json",
         },
-      }),
-    ),
+      })
+    )
   );
 
   const allPullRequests = _.flatten(
     res
       .filter(
         (result): result is PromiseFulfilledResult<any> =>
-          result.status === "fulfilled",
+          result.status === "fulfilled"
       )
-      .map((result) => result.value.data),
+      .map((result) => result.value.data)
   );
 
-  return allPullRequests;
+  return excludeOwnPRs
+    ? allPullRequests.filter((pr) => pr.user.login !== currentUser)
+    : allPullRequests;
 };
 
 const FORM_PAYLOAD_LOCAL_STORAGE_KEY = "form-submit-payload";
 
 export default function Home() {
   const router = useRouter();
-  const { githubToken, owner, repositories } = router.query;
+  const { githubToken, owner, repositories, excludeOwnPRs } = router.query;
   const { t } = useTranslation("common");
   const [repoName, setRepoName] = useState("");
   const { toast } = useToast();
@@ -86,16 +100,18 @@ export default function Home() {
     githubToken: string;
     owner: string;
     repositories: string[];
+    excludeOwnPRs: boolean;
   }>({
     defaultValues: {
       githubToken: "",
       owner: "",
       repositories: [],
+      excludeOwnPRs: false,
     },
   });
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.COMPACT);
   const [groupMode, setGroupMode] = useState<GroupMode>(
-    GroupMode.GROUP_BY_REPO,
+    GroupMode.GROUP_BY_REPO
   );
   const [sortMode, setSortMode] = useState<SortMode>(SortMode.CREATED_AT_ASC);
   const { getValues, handleSubmit, setValue, reset } = form;
@@ -111,18 +127,31 @@ export default function Home() {
       }
     }
 
-    if (Object.keys(router.query).length > 0) {
-      const repositoriesArray = Array.isArray(repositories)
-        ? repositories
-        : ((repositories as string) || "").split(",");
-      const validRepositories = repositoriesArray.filter((repo) => repo !== "");
-      reset({
-        githubToken: (githubToken as string) || "",
-        owner: (owner as string) || "",
-        repositories: validRepositories,
-      });
+    if (Object.keys(router.query).length <= 0) {
+      return;
     }
-  }, [setValue, router.query]);
+
+    const repositoriesArray = Array.isArray(repositories)
+      ? repositories
+      : ((repositories as string) || "").split(",");
+
+    const validRepositories = repositoriesArray.filter((repo) => repo !== "");
+
+    reset({
+      githubToken: (githubToken as string) || "",
+      owner: (owner as string) || "",
+      repositories: validRepositories,
+      excludeOwnPRs: (excludeOwnPRs as string) === "true",
+    });
+  }, [
+    setValue,
+    router.query,
+    reset,
+    repositories,
+    githubToken,
+    owner,
+    excludeOwnPRs,
+  ]);
 
   const {
     data: allPullRequestList,
@@ -136,6 +165,7 @@ export default function Home() {
         githubToken: getValues().githubToken,
         owner: getValues().owner,
         repositories: getValues().repositories,
+        excludeOwnPRs: getValues().excludeOwnPRs,
       }),
     enabled: false,
   });
@@ -144,7 +174,7 @@ export default function Home() {
     const sortedPullRequestList = _.orderBy(
       allPullRequestList,
       "created_at",
-      sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc",
+      sortMode === SortMode.CREATED_AT_ASC ? "asc" : "desc"
     );
 
     return groupMode === GroupMode.GROUP_BY_REPO
@@ -157,6 +187,7 @@ export default function Home() {
       githubToken: data.githubToken,
       owner: data.owner,
       repositories: data.repositories.join(","),
+      excludeOwnPRs: data.excludeOwnPRs.toString(),
     });
     router.replace(`/?${queryParams.toString()}`);
     if (
@@ -164,7 +195,7 @@ export default function Home() {
     ) {
       localStorage.setItem(
         FORM_PAYLOAD_LOCAL_STORAGE_KEY,
-        JSON.stringify(data),
+        JSON.stringify(data)
       );
     }
     refetch();
@@ -230,7 +261,7 @@ export default function Home() {
                           <CompactPullRequestItem key={pr.id} pr={pr} />
                         ) : (
                           <NormalPullRequestItem key={pr.id} pr={pr} />
-                        ),
+                        )
                       )}
                     </ul>
                   </TableCell>
@@ -367,8 +398,8 @@ export default function Home() {
                                     onClick={() =>
                                       field.onChange(
                                         field.value.filter(
-                                          (_, i) => i !== index,
-                                        ),
+                                          (_, i) => i !== index
+                                        )
                                       )
                                     }
                                   >
@@ -380,6 +411,26 @@ export default function Home() {
                           </div>
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="excludeOwnPRs"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>{t("form.exclude_own_prs")}</FormLabel>
+                          <FormDescription>
+                            {t("form.exclude_own_prs_description")}
+                          </FormDescription>
+                        </div>
                       </FormItem>
                     )}
                   />

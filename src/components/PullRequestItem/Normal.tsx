@@ -1,3 +1,4 @@
+import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -74,7 +75,7 @@ const NormalPullRequestItem: React.FC<{ pr: PullRequest }> = ({ pr }) => {
           <ScrollArea className="h-auto">
             <ReactMarkdown
               components={{
-                a: ({ node, ...props }) => (
+                a: ({ ...props }) => (
                   <a
                     className="text-blue-500 hover:underline"
                     target="_blank"
@@ -82,29 +83,29 @@ const NormalPullRequestItem: React.FC<{ pr: PullRequest }> = ({ pr }) => {
                     {...props}
                   />
                 ),
-                code: ({ node, ...props }) => (
+                code: ({ ...props }) => (
                   <code
                     className="bg-gray-100 rounded px-1 py-0.5"
                     {...props}
                   />
                 ),
-                h1: ({ node, ...props }) => (
+                h1: ({ ...props }) => (
                   <h1 className="text-2xl font-bold mt-4 mb-2" {...props} />
                 ),
-                h2: ({ node, ...props }) => (
+                h2: ({ ...props }) => (
                   <h2 className="text-xl font-semibold mt-3 mb-2" {...props} />
                 ),
-                h3: ({ node, ...props }) => (
+                h3: ({ ...props }) => (
                   <h3 className="text-lg font-medium mt-2 mb-1" {...props} />
                 ),
-                p: ({ node, ...props }) => <p className="mb-2" {...props} />,
-                ul: ({ node, ...props }) => (
+                p: ({ ...props }) => <p className="mb-2" {...props} />,
+                ul: ({ ...props }) => (
                   <ul className="list-disc list-inside mb-2" {...props} />
                 ),
-                ol: ({ node, ...props }) => (
+                ol: ({ ...props }) => (
                   <ol className="list-decimal list-inside mb-2" {...props} />
                 ),
-                blockquote: ({ node, ...props }) => (
+                blockquote: ({ ...props }) => (
                   <blockquote
                     className="border-l-4 border-gray-300 pl-4 italic"
                     {...props}
