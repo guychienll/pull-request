@@ -18,7 +18,7 @@ const PrivacyPolicy: React.FC = () => {
           <li>
             <p>
               <strong>With advertising and analytics partners.</strong>
-              Please refer to the section titled "Advertising and Analytics"
+              Please refer to the section titled &quot;Advertising and Analytics&quot;
               below.
             </p>
           </li>
@@ -44,8 +44,8 @@ const PrivacyPolicy: React.FC = () => {
           knowingly collect personal information from children. If you are a
           parent or legal guardian and believe your child under 13 has provided
           us with information, please contact us at the address listed at the
-          end of this privacy policy by email or letter. Please include "COPPA
-          Information Request" in your query.
+          end of this privacy policy by email or letter. Please include &quot;COPPA
+          Information Request&quot; in your query.
         </p>
 
         <h3 className="text-xl font-semibold mt-6 mb-2">
