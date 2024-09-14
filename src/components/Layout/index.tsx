@@ -1,8 +1,8 @@
+import SideNav from "@/components/SideNav";
 import { Toaster } from "@/components/ui/toaster";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import SideNav from "@/components/SideNav";
+import React from "react";
 
 interface LayoutProps {
   children: React.ReactNode;

@@ -36,6 +36,7 @@ const resource = {
       "actions.open_pr_in_new_tab": "Open PR in New Tab",
       "pull_request.created_at": "Created at {{date}}",
       "navigation.language": "Language",
+      "navigation.privacy": "Privacy Policy",
       "language.zh-TW": "繁體中文",
       "language.en": "English",
       "language.ja": "日本語",
@@ -63,6 +64,7 @@ const resource = {
       description: "PR Platform | 聚集所有 Pull Request 的平台",
       "navigation.home": "首頁",
       "navigation.settings": "設定",
+      "navigation.privacy": "隱私政策",
       "errors.general": "一般錯誤",
       "pull_request.query_title": "Pull Request",
       "pull_request.query_description":
@@ -121,6 +123,7 @@ const resource = {
       description: "PR Platform | プルリクエストを集約するプラットフォーム",
       "navigation.home": "ホーム",
       "navigation.settings": "設定",
+      "navigation.privacy": "プライバシーポリシー",
       "errors.general": "一般エラー",
       "pull_request.query_title": "プルリクエスト",
       "pull_request.query_description":
@@ -179,6 +182,7 @@ const resource = {
       description: "PR Platform | 풀 리퀘스트를 집계하는 플랫폼",
       "navigation.home": "홈",
       "navigation.settings": "설정",
+      "navigation.privacy": "개인정보처리방침",
       "errors.general": "일반 오류",
       "pull_request.query_title": "풀 리퀘스트",
       "pull_request.query_description":
@@ -237,6 +241,7 @@ const resource = {
       description: "PR Platform | พอร์ทัลที่รวมคำขอดึงทั้งหมด",
       "navigation.home": "หน้าหลัก",
       "navigation.settings": "ตั้งค่า",
+      "navigation.privacy": "นโยบายความเป็นส่วนตัว",
       "errors.general": "ข้อผิดพลาดทั่วไป",
       "pull_request.query_title": "คำขอดึง",
       "pull_request.query_description":
@@ -294,6 +299,7 @@ const resource = {
         "Cách lấy mã thông báo GitHub (cần quyền truy cập kho lưu trữ)",
       description: "PR Platform | Nền tảng tổng hợp tất cả các yêu cầu kéo",
       "navigation.home": "Trang chủ",
+      "navigation.privacy": "Chính sách bảo mật",
       "errors.general": "Lỗi chung",
       "pull_request.query_title": "Yêu cầu kéo",
       "pull_request.query_description":

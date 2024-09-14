@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { GlobeIcon, SettingsIcon } from "lucide-react";
+import { GlobeIcon, SettingsIcon, ShieldIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -40,6 +40,18 @@ function SideNav() {
             <SettingsIcon className="h-5 w-5 flex-shrink-0" />
             <span className="md:inline-block hidden">
               {t("navigation.settings")}
+            </span>
+          </Button>
+        </li>
+        <li>
+          <Button
+            className="flex gap-x-2 items-center"
+            variant="ghost"
+            onClick={() => router.push("/privacy")}
+          >
+            <ShieldIcon className="h-5 w-5 flex-shrink-0" />
+            <span className="md:inline-block hidden">
+              {t("navigation.privacy")}
             </span>
           </Button>
         </li>
