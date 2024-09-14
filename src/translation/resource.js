@@ -139,7 +139,8 @@ const resource = {
       "form.exclude_own_prs": "自分の PR を除外",
       "form.exclude_own_prs_description": "自分が作成した PR を除外します。",
       "form.keyword_search_label": "キーワード検索",
-      "form.keyword_search_description": "キーワードを入力して PR を検索します。",
+      "form.keyword_search_description":
+        "キーワードを入力して PR を検索します。",
       "form.enter_keyword": "キーワードを入力",
       "form.keyword_search_aria_label": "キーワード検索",
       "form.clear_keyword_search": "キーワード検索をクリア",
@@ -300,6 +301,7 @@ const resource = {
       description: "PR Platform | Nền tảng tổng hợp tất cả các yêu cầu kéo",
       "navigation.home": "Trang chủ",
       "navigation.privacy": "Chính sách bảo mật",
+      "navigation.settings": "Cài đặt",
       "errors.general": "Lỗi chung",
       "pull_request.query_title": "Yêu cầu kéo",
       "pull_request.query_description":
@@ -331,7 +333,6 @@ const resource = {
       "actions.open_pr_in_new_tab": "Mở PR trong tab mới",
       "pull_request.created_at": "Tạo lúc {{date}}",
       "navigation.language": "Ngôn ngữ",
-      "navigation.settings": "Cài đặt",
       "language.zh-TW": "繁體中文",
       "language.en": "English",
       "language.ja": "日本語",
