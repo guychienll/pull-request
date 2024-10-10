@@ -1,3 +1,4 @@
+import FilterPanel from "@/components/FilterPanel";
 import CompactPullRequestItem from "@/components/PullRequestItem/Compact";
 import NormalPullRequestItem from "@/components/PullRequestItem/Normal";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -33,18 +35,16 @@ import { useToast } from "@/hooks/use-toast";
 import { GroupMode, PullRequest, SortMode, ViewMode } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import Fuse from "fuse.js";
 import * as _ from "lodash";
 import { CopyIcon, InboxIcon, XIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import HashLoader from "react-spinners/HashLoader";
-import FilterPanel from "@/components/FilterPanel";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
-import Fuse from "fuse.js";
 
 const fetchPullRequests = async ({
   githubToken,

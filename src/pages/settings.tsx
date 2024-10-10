@@ -42,10 +42,15 @@ const Settings = () => {
       LOCAL_STORAGE_KEY,
       JSON.stringify(data.useLocalStorage)
     );
-    toast({
-      title: t("settings.saved"),
-      description: t("settings.saved_description"),
-    });
+    toast(
+      {
+        title: t("settings.saved"),
+        description: t("settings.saved_description"),
+      },
+      {
+        duration: 5000,
+      }
+    );
   };
 
   return (
