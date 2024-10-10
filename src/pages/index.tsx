@@ -32,7 +32,7 @@ import { LOCAL_STORAGE_KEY } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
 import { GroupMode, PullRequest, SortMode, ViewMode } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import * as _ from "lodash";
 import { CopyIcon, InboxIcon, XIcon } from "lucide-react";
 import { useTranslation } from "next-i18next";
@@ -171,6 +171,7 @@ export default function Home() {
         excludeOwnPRs: getValues().excludeOwnPRs,
       }),
     enabled: false,
+    retry: false,
   });
 
   const pullRequestList = useMemo(() => {
@@ -215,9 +216,25 @@ export default function Home() {
     refetch();
   });
 
-  if (error) {
-    return <div>{t("errors.general", { message: error.message })}</div>;
-  }
+  useEffect(() => {
+    if (error) {
+      const _error = error as AxiosError<{ message: string }>;
+      toast(
+        {
+          variant: "destructive",
+          title: t("errors.general.status_code", {
+            statusCode: _error.response?.status,
+          }),
+          description: t("errors.general.description", {
+            description: _error.response?.data?.message,
+          }),
+        },
+        {
+          duration: 5000,
+        }
+      );
+    }
+  }, [error, t, toast]);
 
   const renderElem = () => {
     if (isLoading && !allPullRequestList) {
@@ -322,10 +339,16 @@ export default function Home() {
                   onClick={() => {
                     const url = window.location.href;
                     navigator.clipboard.writeText(url);
-                    toast({
-                      title: t("form.copied_url"),
-                      description: t("form.copied_url_description"),
-                    });
+                    toast(
+                      {
+                        variant: "default",
+                        title: t("form.copied_url"),
+                        description: t("form.copied_url_description"),
+                      },
+                      {
+                        duration: 5000,
+                      }
+                    );
                   }}
                 >
                   <CopyIcon className="w-4 h-4" />

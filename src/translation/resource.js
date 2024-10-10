@@ -9,6 +9,8 @@ const resource = {
       "navigation.home": "Home",
       "navigation.settings": "Settings",
       "errors.general": "General Error",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "Status Code {{statusCode}}",
       "pull_request.query_title": "Pull Request",
       "pull_request.query_description":
         "Please enter GitHub Token and Repository information to query Pull Request information.",
@@ -64,6 +66,8 @@ const resource = {
       "navigation.home": "首頁",
       "navigation.settings": "設定",
       "errors.general": "一般錯誤",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "狀態碼 {{statusCode}}",
       "pull_request.query_title": "Pull Request",
       "pull_request.query_description":
         "請輸入 GitHub Token 和 Repository 資訊，以查詢 Pull Request 資訊。",
@@ -122,6 +126,8 @@ const resource = {
       "navigation.home": "ホーム",
       "navigation.settings": "設定",
       "errors.general": "一般エラー",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "ステータスコード {{statusCode}}",
       "pull_request.query_title": "プルリクエスト",
       "pull_request.query_description":
         "GitHub トークンとリポジトリ情報を入力して、プルリクエスト情報を照会してください。",
@@ -181,6 +187,8 @@ const resource = {
       "navigation.home": "홈",
       "navigation.settings": "설정",
       "errors.general": "일반 오류",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "상태 코드 {{statusCode}}",
       "pull_request.query_title": "풀 리퀘스트",
       "pull_request.query_description":
         "GitHub 토큰과 저장소 정보를 입력하여 풀 리퀘스트 정보를 쿼리하세요.",
@@ -239,6 +247,8 @@ const resource = {
       "navigation.home": "หน้าหลัก",
       "navigation.settings": "ตั้งค่า",
       "errors.general": "ข้อผิดพลาดทั่วไป",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "สถานะรหัส {{statusCode}}",
       "pull_request.query_title": "คำขอดึง",
       "pull_request.query_description":
         "กรุณาป้อนโทเค็น GitHub และข้อมูลที่เก็บเพื่อสอบถามข้อมูลคำขอดึง",
@@ -297,6 +307,8 @@ const resource = {
       "navigation.home": "Trang chủ",
       "navigation.settings": "Cài đặt",
       "errors.general": "Lỗi chung",
+      "errors.general.description": "{{description}}",
+      "errors.general.status_code": "Mã trạng thái {{statusCode}}",
       "pull_request.query_title": "Yêu cầu kéo",
       "pull_request.query_description":
         "Vui lòng nhập mã thông báo GitHub và thông tin kho lưu trữ để truy vấn thông tin yêu cầu kéo",
