@@ -44,18 +44,6 @@ function SideNav() {
           </Button>
         </li>
         <li>
-          <Button
-            className="flex gap-x-2 items-center"
-            variant="ghost"
-            onClick={() => router.push("/privacy")}
-          >
-            <ShieldIcon className="h-5 w-5 flex-shrink-0" />
-            <span className="md:inline-block hidden">
-              {t("navigation.privacy")}
-            </span>
-          </Button>
-        </li>
-        <li>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="flex gap-x-2 items-center" variant="ghost">
